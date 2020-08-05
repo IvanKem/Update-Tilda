@@ -2,23 +2,28 @@
 import requests
 import config
 import json
-
 from pprint import pprint
 
+response = requests.get('http://api.tildacdn.info/v1/getprojectslist/?publickey=%s&secretkey=%s' % (config.publickey,config.secretkey))
+answer = response.json()
+project_id =[]
+for project in answer['result']:
+    project_id.append(project['id'])
+print(project_id)
+for i in range(len(project_id)):
+    responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey,config.secretkey,project['id']))
 
-responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey,config.secretkey,config.projectid2))
+    #print(responce.text)
+    answer= responce.json()
+    pages_id = []
+    for page in answer['result']:
+        #print(page['id'])
+        pages_id.append(page['id'])
+        responce = requests.get('http://api.tildacdn.info/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (config.publickey,config.secretkey,page['id']))
+        #pprint(responce.json()['result'])
+        file_name = responce.json()['result']['filename']
+        file = open (file_name , 'w', encoding='utf-8')
+        file.write(responce.json()['result']['html'])
+        file.close()
 
-#print(responce.text)
-answer= responce.json()
-pages_id = []
-for page in answer['result']:
-    #print(page['id'])
-    pages_id.append(page['id'])
-    responce = requests.get('http://api.tildacdn.info/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (config.publickey,config.secretkey,page['id']))
-    pprint(responce.json()['result'])
-    file_name = responce.json()['result']['filename']
-    file = open (file_name , 'w', encoding='utf-8')
-    file.write(responce.json()['result']['html'])
-    file.close()
-
-#print(answer['result'])
+    #print(answer['result'])
