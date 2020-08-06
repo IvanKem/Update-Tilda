@@ -3,3 +3,5 @@ config.py
 *.html
 *.idea
 test.py
+*.js
+*.css

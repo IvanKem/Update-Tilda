@@ -22,12 +22,12 @@ for project in project_id:
         #print(page['id'])
         pages_id.append(page['id'])
         responce = requests.get('http://api.tildacdn.info/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (config.publickey,config.secretkey,page['id']))
-        #pprint(responce.json()['result'])
+        pprint(responce.json()['result'])
         file_name = responce.json()['result']['filename']
         file = open (file_name , 'w', encoding='utf-8')
-        file_write = responce.json()['result']['html']
-        if file_write != None:
-            file.write(file_write)
-            file.close()
+        file_html = responce.json()['result']['html']
+        if file_html != None:
+            file.write(file_html)
+        file.close()
 
     #print(answer['result'])
