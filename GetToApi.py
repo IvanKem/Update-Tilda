@@ -10,12 +10,14 @@ project_id =[]
 for project in answer['result']:
     project_id.append(project['id'])
 print(project_id)
-for i in range(len(project_id)):
-    responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey,config.secretkey,project['id']))
+
+for project in project_id:
+    responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey,config.secretkey,project))
 
     #print(responce.text)
     answer= responce.json()
     pages_id = []
+
     for page in answer['result']:
         #print(page['id'])
         pages_id.append(page['id'])
@@ -23,7 +25,9 @@ for i in range(len(project_id)):
         #pprint(responce.json()['result'])
         file_name = responce.json()['result']['filename']
         file = open (file_name , 'w', encoding='utf-8')
-        file.write(responce.json()['result']['html'])
-        file.close()
+        file_write = responce.json()['result']['html']
+        if file_write != None:
+            file.write(file_write)
+            file.close()
 
     #print(answer['result'])
