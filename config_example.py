@@ -1,4 +1,4 @@
 publickey= ''
 secretkey=''
 
-export_path = 'export'
+export_path = 'Export'
