@@ -4,5 +4,8 @@ config.py
 *.idea
 test.py
 test2.py
+*.png
+*.jpg
+*.ico
 *.js
 *.css
