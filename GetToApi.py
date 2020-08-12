@@ -7,6 +7,7 @@ from pprint import pprint
 from urllib.request import urlretrieve
 import os
 
+a=''
 
 response = requests.get('http://api.tildacdn.info/v1/getprojectslist/?publickey=%s&secretkey=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey))
 answer = response.json()
