@@ -8,7 +8,7 @@ from urllib.request import urlretrieve
 import os
 
 
-response = requests.get('http://api.tildacdn.info/v1/getprojectslist/?publickey=%s&secretkey=%s' % (config.publickey,config.secretkey))
+response = requests.get('http://api.tildacdn.info/v1/getprojectslist/?publickey=%s&secretkey=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey))
 answer = response.json()
 
 for project in answer['result']:
@@ -24,14 +24,14 @@ for project in answer['result']:
         pass
     else:
         os.mkdir(config_example.export_path + '/' + project_id)
-    responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey,config.secretkey,project_id  ))
+    responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey,project_id  ))
 
     #print(responce.text)
     answer= responce.json()
     pages_id = []
 
     for page in answer['result']:
-        #print(page['id'])
+        print(page['id'])
         #pages_id.append(page['id'])
 
         css_path = config_example.export_path + '/' + project_id+'/'+ page['id']+ '/css'
@@ -71,7 +71,7 @@ for project in answer['result']:
                 os.mkdir(page_path)
             try:
                 images_path = config_example.export_path + '/' + project_id + '/' + page['id']+'/' + config_example.export[page_ID]['images_path']
-                #print(images_path)
+                print(images_path)
                 if os.path.exists(images_path):
                     pass
                 else:
@@ -114,7 +114,7 @@ for project in answer['result']:
                     os.mkdir(js_path)
 
 
-        responce = requests.get('http://api.tildacdn.info/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (config.publickey,config.secretkey,page['id']))
+        responce = requests.get('http://api.tildacdn.info/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey,page['id']))
         # pprint(responce.json()['result']['css'])
         file_list_css = responce.json()['result']['css']
         for file in file_list_css:
@@ -134,4 +134,6 @@ for project in answer['result']:
         file_list_js = responce.json()['result']['js']
         for file in file_list_js:
             urlretrieve(file['from'], (js_path +'/' + file['to']))
+
+
 
