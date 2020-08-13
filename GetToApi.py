@@ -6,7 +6,8 @@ import json
 from pprint import pprint
 from urllib.request import urlretrieve
 import os
-
+from config_example import *
+from config import *
 
 
 response = requests.get('http://api.tildacdn.info/v1/getprojectslist/?publickey=%s&secretkey=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey))
@@ -17,33 +18,34 @@ for project in answer['result']:
 
 
 
-    if os.path.exists(config_example.export_path):
+    if os.path.exists(export_path):
         pass
     else:
-        os.mkdir(config_example.export_path)
-    if os.path.exists(config_example.export_path + '/' + project_id):
-        pass
-    else:
-        os.mkdir(config_example.export_path + '/' + project_id)
+        os.mkdir(export_path)
+    if export == {}:
+        if os.path.exists(export_path + '/' + project_id):
+            pass
+        else:
+            os.mkdir(export_path + '/' + project_id)
     responce = requests.get('http://api.tildacdn.info/v1/getpageslist/?publickey=%s&secretkey=%s&projectid=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey,project_id  ))
 
     #print(responce.text)
     answer= responce.json()
-    pages_id = []
+
 
     for page in answer['result']:
         print(page['id'])
         #pages_id.append(page['id'])
 
-        css_path = config_example.export_path + '/' + project_id+'/'+ page['id']+ '/css'
-        js_path = config_example.export_path + '/' + project_id + '/' + page['id'] + '/js'
-        images_path = config_example.export_path + '/' + project_id + '/' + page['id'] + '/images'
+        css_path = export_path + '/' + project_id+'/'+ page['id']+ '/css'
+        js_path = export_path + '/' + project_id + '/' + page['id'] + '/js'
+        images_path = export_path + '/' + project_id + '/' + page['id'] + '/images'
 
         if config_example.export == {}:
-            if os.path.exists(config_example.export_path + '/' + project_id + '/' + page['id']):
+            if os.path.exists(export_path + '/' + project_id + '/' + page['id']):
                 pass
             else:
-                os.mkdir(config_example.export_path + '/' + project_id+'/'+ page['id'])
+                os.mkdir(export_path + '/' + project_id+'/'+ page['id'])
 
 
             if os.path.exists(css_path):
@@ -64,55 +66,65 @@ for project in answer['result']:
                 os.mkdir(js_path)
 
         else:
-            page_ID = config_example.page_ID
-            page_path = config_example.export_path + '/' + project_id + '/' + page['id']
-            if os.path.exists(page_path):
-                pass
-            else:
-                os.mkdir(page_path)
-            try:
-                images_path = config_example.export_path + '/' + project_id + '/' + page['id']+'/' + config_example.export[page_ID]['images_path']
-                print(images_path)
-                if os.path.exists(images_path):
-                    pass
-                else:
-                    os.mkdir(images_path)
-            except FileNotFoundError:
-                images_path = config_example.export[page_ID]['images_path']
-                print(images_path)
-                if os.path.exists(images_path):
-                    pass
-                else:
-                    os.mkdir(images_path)
+            projects_id = export.keys()
+            print(projects_id)
+            for project_id in projects_id:
+                project_id = str(project_id)
+                project_path = export_path + '/' + project_id
+                page_path = export_path + '/' + project_id + '/' + page['id']
 
-            try:
-                css_path = config_example.export_path + '/' + project_id + '/' + page['id'] + '/' + config_example.export[page_ID]['css_path']
-
-                if os.path.exists(css_path):
+                if os.path.exists(project_path):
                     pass
                 else:
-                    os.mkdir(css_path)
+                    os.mkdir(project_path)
 
-            except FileNotFoundError:
-                ccs_path = config_example.export[page_ID]['css_path']
-                if os.path.exists(css_path):
+                if os.path.exists(page_path):
                     pass
                 else:
-                    os.mkdir(css_path)
+                    os.mkdir(page_path)
+                try:
+                    images_path = export_path + '/' + project_id + '/' + page['id']+'/' + export[int(project_id)]['images_path']
+                    print(images_path)
+                    if os.path.exists(images_path):
+                        pass
+                    else:
+                        os.mkdir(images_path)
+                except FileNotFoundError:
+                    images_path =  export[int(project_id)]['images_path']
+                    print(images_path)
+                    if os.path.exists(images_path):
+                        pass
+                    else:
+                        os.mkdir(images_path)
 
-            try:
-                js_path = config_example.export_path + '/' + project_id + '/' + page['id'] + '/' + config_example.export[page_ID]['js_path']
+                try:
+                    css_path = export_path + '/' + project_id + '/' + page['id'] + '/' + export[int(project_id)]['css_path']
 
-                if os.path.exists(js_path):
-                    pass
-                else:
-                    os.mkdir(js_path)
-            except FileNotFoundError:
-                images_path = config_example.export[page_ID]['js_path']
-                if os.path.exists(js_path):
-                    pass
-                else:
-                    os.mkdir(js_path)
+                    if os.path.exists(css_path):
+                        pass
+                    else:
+                        os.mkdir(css_path)
+
+                except FileNotFoundError:
+                    ccs_path = export[int(project_id)]['css_path']
+                    if os.path.exists(css_path):
+                        pass
+                    else:
+                        os.mkdir(css_path)
+
+                try:
+                    js_path = export_path + '/' + project_id + '/' + page['id'] + '/' + export[int(project_id)]['js_path']
+
+                    if os.path.exists(js_path):
+                        pass
+                    else:
+                        os.mkdir(js_path)
+                except FileNotFoundError:
+                    js_path = export[int(project_id)]['js_path']
+                    if os.path.exists(js_path):
+                        pass
+                    else:
+                        os.mkdir(js_path)
 
 
         responce = requests.get('http://api.tildacdn.info/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (config.publickey or config_example.publickey,config.secretkey or config_example.secretkey,page['id']))
@@ -122,7 +134,7 @@ for project in answer['result']:
             urlretrieve(file['from'], (css_path + '/'+ file['to']))
 
         file_name = responce.json()['result']['filename']
-        file = open(config_example.export_path + '/' + project_id+'/'+ page['id'] + '/'+  file_name, 'w', encoding='utf-8')
+        file = open(export_path + '/' + project_id+'/'+ page['id'] + '/'+  file_name, 'w', encoding='utf-8')
         file_html = responce.json()['result']['html']
         if file_html != None:
             file.write(file_html)
