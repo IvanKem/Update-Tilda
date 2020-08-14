@@ -37,7 +37,9 @@ def webhook():
 
     elif request.method == 'POST':
         pageid = request.values.get('pageid')  # Your form's
+        a = ''
         return pageid
+
 
 
 app.run(debug=True, port=8080)
