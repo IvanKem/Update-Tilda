@@ -2,7 +2,7 @@ from flask import Flask, request,request, redirect
 
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['GET', 'POST'])
+@app.route('/webhook', methods=['GET'])
 def webhook():
     if request.method == 'GET':
         page = "None"
@@ -24,20 +24,10 @@ def webhook():
 
 
 
-        return """
-            <html>
-                <body>
-                    <p>{}</p>
-                    <p>{}</p>
-                </body>
-            </html>
-            """.format(page, project)
+        return {'success': 'true'}
 
 
 
-    elif request.method == 'POST':
-        pageid = request.values.get('pageid')  # Your form's
-        return pageid
 
 
 
