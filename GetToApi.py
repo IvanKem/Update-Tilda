@@ -185,8 +185,8 @@ else:
         pass
     else:
         os.mkdir(js_path)
-    responce = requests.get('http://brainz2020.page-on.ru/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' % (
-    config.publickey or config_example.publickey, config.secretkey or config_example.secretkey, data.page_id))
+    responce = requests.get('http://brainz2020.page-on.ru/v1/getpagefullexport/?publickey=%s&secretkey=%s&pageid=%s' %
+        (config.publickey or config_example.publickey, config.secretkey or config_example.secretkey, data.page_id))
     # pprint(responce.json()['result']['css'])
     file_list_css = responce.json()['result']['css']
     try:
