@@ -160,6 +160,3 @@ for project in answer['result']:
                 urlretrieve(file['from'], (js_path +'/' + file['to']))
         except:
             pass
-
-
-

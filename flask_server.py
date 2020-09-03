@@ -1,6 +1,10 @@
 from flask import Flask, request,request, redirect
+import sqlite3
 
 app = Flask(__name__)
+
+
+id = 0
 
 @app.route('/webhook', methods=['GET'])
 def webhook():
@@ -14,14 +18,14 @@ def webhook():
         if "projectid" in request.args:
             project = request.args.get('projectid','')
 
-        file = open('data.py', 'w', encoding='utf-8')
-        page_id = 'page_id =' + page
-        project_id = 'project_id='+project
-        if page != None:
-            file.write(page_id)
-            file.write('\n'+project_id)
-        file.close()
-
+        if page and project:
+            global id
+            with sqlite3.connect('db.sqlite') as conn:
+                id+=1
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO webhook_projects (id, project, page) VALUES (?,?,?)", (id ,project, page))
+                # сохранить изменения
+                conn.commit()
 
 
         return {'success': 'true'}
